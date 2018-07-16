@@ -29,14 +29,8 @@ BB board::get_pawn_moves_as_bitboard(unsigned short position, bool is_black) {
 }
 
 BB board::get_rook_moves_as_bitboard(unsigned short pos, bool is_black) {
-	if (false) {
-		BB index = ((occupied & ROccupancy[pos]) * RMagic[pos]) >> (64 - RBits[pos]);
-		return rookMoves[pos][index] & ~(occupied_array[is_black]);
-	}
-	else {
-		BB rook_attacks = sliders.RookAttacks(occupied, (int)pos);
-		return rook_attacks & ~(occupied_array[is_black]);
-	}
+	BB rook_attacks = sliders.RookAttacks(occupied, (int)pos);
+	return rook_attacks & ~(occupied_array[is_black]);
 }
 
 BB board::get_knight_moves_as_bitboard(unsigned short pos, bool is_black) {
@@ -44,13 +38,7 @@ BB board::get_knight_moves_as_bitboard(unsigned short pos, bool is_black) {
 }
 
 BB board::get_bishop_moves_as_bitboard(unsigned short pos, bool is_black) {
-	if (false) {
-		BB index = ((occupied & BOccupancy[pos]) * BMagic[pos]) >> (64 - BBits[pos]);
-		return bishopMoves[pos][index] & ~(occupied_array[is_black]);
-	}
-	else {
-		return sliders.BishopAttacks(occupied, pos) & ~occupied_array[is_black ? 1 : 0];
-	}
+	return sliders.BishopAttacks(occupied, pos) & ~occupied_array[is_black ? 1 : 0];
 }
 
 BB board::get_queen_moves_as_bitboard(unsigned short position, bool isBlack) {
@@ -589,7 +577,7 @@ void board::print_support() {
 	}
 }
 
-std::vector<std::string> board::bitboard_to_string(){
+std::vector<std::string> board::bitboard_to_string() {
 	std::vector<std::string> to_ret;
 	for (int player = 0; player < 2; player++) {
 		for (int piece = 0; piece < 6; piece++) {

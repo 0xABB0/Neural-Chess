@@ -1,12 +1,18 @@
 #include "winboard.h"
 
-void winboard_loop(board &b, Player engine) {
-	enum { WHITE, BLACK, FORCE_MODE } engine_mode;
+std::string parse_command(std::string& command, std::vector<std::string>& command_tokens) {
+	boost::algorithm::to_lower(command);
+
+	boost::split(command_tokens, command, [](char c) {return c == ' '; });
+	return command_tokens[0];
+}
+
+void winboard_loop(board &b, Player engine, std::string& command) {
+	enum { WHITE, BLACK, FORCE_MODE, ANALYZE } engine_mode;
 	enum { WHITETOMOVE, BLACKTOMOVE } game_state;
 	int last_game_result;
 	std::string results[3] = { "1-0", "0-1", "1/2-1/2" };
 
-	std::string command;
 	engine_mode = BLACK;
 	do {
 		if ((engine_mode == BLACK && game_state == BLACKTOMOVE) || (engine_mode == WHITE && game_state == WHITETOMOVE)) {
@@ -33,15 +39,11 @@ void winboard_loop(board &b, Player engine) {
 				std::cout << "move " << move.to_long_algebraic_notation() << std::endl;
 			}
 		}
-
-		std::string complete_command;
+		std::getline(std::cin, command);
 
 		std::vector<std::string> command_tokens;
-		std::getline(std::cin, complete_command);
-		boost::algorithm::to_lower(complete_command);
 
-		boost::split(command_tokens, complete_command, [](char c) {return c == ' '; });
-		command = command_tokens[0];
+		command = parse_command(command, command_tokens);
 
 		if (command == "force") {
 			engine_mode = FORCE_MODE;
@@ -135,8 +137,8 @@ void winboard_loop(board &b, Player engine) {
 			*/
 		}
 		else if (command == "protover") {
-			std::string supported_features[5] = { "ping", "colors", "usermove", "setboard", "debug" };
-			std::string unsupported_features[13] = { "time", "smp", "analyze", "playother", "san", "draw", "sigint", "sigterm", "ics", "name", "pause", "nps", "memory" };
+			std::vector<std::string> supported_features = { "ping", "colors", "usermove", "setboard", "debug" };
+			std::vector<std::string> unsupported_features = { "time", "smp", "analyze", "playother", "san", "draw", "sigint", "sigterm", "ics", "name", "pause", "nps", "memory" };
 
 			for (std::string feat : supported_features)
 				std::cout << "feature " << feat << "=1" << std::endl;

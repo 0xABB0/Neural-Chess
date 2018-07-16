@@ -14,3 +14,4 @@ This project is still in development, it fullly supports only "new" and "usermov
 * Try different types of neural network
 * Opening books
 * Using threads
+* Implement configuration file

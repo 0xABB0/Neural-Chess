@@ -54,7 +54,7 @@ BB board::get_king_moves_as_bitboard(unsigned short position, bool is_black) {
 	return King_Lookup_Table[position] & ~(occupied_array[is_black]);
 }
 
-void board::make_move(Single_move move) {
+void board::make_move(move move) {
 	if (move.special_move_flag == 0 || move.special_move_flag == 1) {
 		BB end = 1i64 << move.ending_position;
 		BB start = 1i64 << move.starting_position;
@@ -83,25 +83,25 @@ void board::make_move(Single_move move) {
 	}
 	else if (move.special_move_flag == 2) {}
 	else if (move.special_move_flag == 3) {
-		make_move(Single_move(move.player, king, move.starting_position, move.ending_position, 0, 0));
+		make_move(move(move.player, king, move.starting_position, move.ending_position, 0, 0));
 		if (!move.player) {
 			if (move.ending_position == 7) {
 				//short castle
-				make_move(Single_move(white, rooks, 7, 5, 0, 0));
+				make_move(move(white, rooks, 7, 5, 0, 0));
 			}
 			else if (move.ending_position == 3) {
 				//long castle
-				make_move(Single_move(white, rooks, 0, 3, 0, 0));
+				make_move(move(white, rooks, 0, 3, 0, 0));
 			}
 		}
 		else {
 			if (move.ending_position == 63) {
 				//short castle
-				make_move(Single_move(black, rooks, 64, 62, 0, 0));
+				make_move(move(black, rooks, 64, 62, 0, 0));
 			}
 			else if (move.ending_position == 57) {
 				//long castle
-				make_move(Single_move(white, rooks, 56, 59, 0, 0));
+				make_move(move(white, rooks, 56, 59, 0, 0));
 			}
 		}
 	}
@@ -192,8 +192,8 @@ bool board::check(bool color) {
 
 bool board::checkmate(bool color)
 {
-	std::vector<Single_move> all_possible_moves = get_all_moves(color);
-	for (Single_move move : all_possible_moves) {
+	std::vector<move> all_possible_moves = get_all_moves(color);
+	for (move move : all_possible_moves) {
 		board copy(*this);
 		copy.make_move(move);
 		if (!copy.check(color)) {
@@ -265,146 +265,146 @@ void print_bitboard(const BB bitboard) {
 	std::cout << std::endl;
 }
 
-vector<Single_move> board::get_pawns_moves(bool player, int position) {
-	std::vector<Single_move> possible_moves;
+vector<move> board::get_pawns_moves(bool player, int position) {
+	std::vector<move> possible_moves;
 	BB bitboard_move = get_pawn_moves_as_bitboard(position, player);
 	for (int i = 0; i < 64; i++) {
 		BB shifted_moves = bitboard_move >> (BB)i;
 		if (shifted_moves & (BB)1) {
 			if (player ? i < 8 : i > 55) {
 				for (int promotion = 1; i < 5; i++) {
-					possible_moves.push_back(Single_move(player, pawns, position, i, 1, promotion));
+					possible_moves.push_back(move(player, pawns, position, i, 1, promotion));
 				}
 			}
 			else {
-				possible_moves.push_back(Single_move(player, pawns, position, i, 0, 0));
+				possible_moves.push_back(move(player, pawns, position, i, 0, 0));
 			}
 		}
 	}
 	return possible_moves;
 }
 
-vector<Single_move> board::get_bishops_moves(bool player, int position) {
-	std::vector<Single_move> possible_moves;
+vector<move> board::get_bishops_moves(bool player, int position) {
+	std::vector<move> possible_moves;
 	BB bitboard_move = get_bishop_moves_as_bitboard(position, player);
 	for (int i = 0; i < 64; i++) {
 		BB shifted_moves = bitboard_move >> i;
 		if (shifted_moves & 1) {
-			possible_moves.push_back(Single_move(player, bishops, position, i, 0, 0));
+			possible_moves.push_back(move(player, bishops, position, i, 0, 0));
 		}
 	}
 	return possible_moves;
 }
 
-vector<Single_move> board::get_rooks_moves(bool player, int position) {
-	std::vector<Single_move> possible_moves;
+vector<move> board::get_rooks_moves(bool player, int position) {
+	std::vector<move> possible_moves;
 	BB bitboard_move = get_rook_moves_as_bitboard(position, player);
 	for (int i = 0; i < 64; i++) {
 		BB shifted_moves = bitboard_move >> i;
 		if (shifted_moves & 1) {
-			possible_moves.push_back(Single_move(player, rooks, position, i, 0, 0));
+			possible_moves.push_back(move(player, rooks, position, i, 0, 0));
 		}
 	}
 	return possible_moves;
 }
 
-vector<Single_move> board::get_queens_moves(bool player, int position) {
-	std::vector<Single_move> possible_moves;
+vector<move> board::get_queens_moves(bool player, int position) {
+	std::vector<move> possible_moves;
 	BB bitboard_move = get_queen_moves_as_bitboard(position, player);
 	for (int i = 0; i < 64; i++) {
 		BB shifted_moves = bitboard_move >> i;
 		if (shifted_moves & 1) {
-			possible_moves.push_back(Single_move(player, queens, position, i, 0, 0));
+			possible_moves.push_back(move(player, queens, position, i, 0, 0));
 		}
 	}
 	return possible_moves;
 }
 
-vector<Single_move> board::get_king_moves(bool player, int position) {
-	std::vector<Single_move> possible_moves;
+vector<move> board::get_king_moves(bool player, int position) {
+	std::vector<move> possible_moves;
 	BB bitboard_move = get_king_moves_as_bitboard(position, player);
 	if (player) {
 		if (can_black_castle_long && (get_all_moves_as_bitboards(!player) & (~occupied & (3i64 << 61)))) {
-			possible_moves.push_back(Single_move(player, king, 60, 62, 3, 0));
+			possible_moves.push_back(move(player, king, 60, 62, 3, 0));
 		}
 		if (can_black_castle_short && (get_all_moves_as_bitboards(!player) & (~occupied & (3i64 << 58)))) {
-			possible_moves.push_back(Single_move(player, king, 60, 57, 3, 0));
+			possible_moves.push_back(move(player, king, 60, 57, 3, 0));
 		}
 	}
 	else {
 		if (can_white_castle_long && (get_all_moves_as_bitboards(!player) & (~occupied & (3i64 << 2)))) {
-			possible_moves.push_back(Single_move(player, king, 4, 2, 3, 0));
+			possible_moves.push_back(move(player, king, 4, 2, 3, 0));
 		}
 		if (can_white_castle_short && (get_all_moves_as_bitboards(!player) & (~occupied & (3i64 << 5)))) {
 
-			possible_moves.push_back(Single_move(player, king, 4, 6, 3, 0));
+			possible_moves.push_back(move(player, king, 4, 6, 3, 0));
 		}
 	}
 
 	for (int i = 0; i < 64; i++) {
 		BB shifted_moves = bitboard_move >> i;
 		if (shifted_moves & 1) {
-			possible_moves.push_back(Single_move(player, king, position, i, 0, 0));
+			possible_moves.push_back(move(player, king, position, i, 0, 0));
 		}
 	}
 	return possible_moves;
 }
 
-vector<Single_move> board::get_knights_moves(bool player, int position) {
-	std::vector<Single_move> possible_moves;
+vector<move> board::get_knights_moves(bool player, int position) {
+	std::vector<move> possible_moves;
 	BB bitboard_move = get_knight_moves_as_bitboard(position, player);
 	for (int i = 0; i < 64; i++) {
 		BB shifted_moves = bitboard_move >> i;
 		if (shifted_moves & 1) {
-			possible_moves.push_back(Single_move(player, knights, position, i, 0, 0));
+			possible_moves.push_back(move(player, knights, position, i, 0, 0));
 		}
 	}
 	return possible_moves;
 }
 
-vector<Single_move> board::get_all_moves(bool player) {
-	vector<Single_move> all_possible_moves;
+vector<move> board::get_all_moves(bool player) {
+	vector<move> all_possible_moves;
 	for (int i = 0; i < 64; i++) {
 		if (occupied_array[player] & (1i64 << i)) {
 			int piece_type = support_game_board[i];
 			switch (piece_type) {
 			case pawns: {
-				std::vector<Single_move> a = get_pawns_moves(player, i);
+				std::vector<move> a = get_pawns_moves(player, i);
 				if (a.size() != 0) {
 					all_possible_moves.insert(all_possible_moves.end(), a.begin(), a.end());
 				}
 				break;
 			}
 			case rooks: {
-				std::vector<Single_move> a = get_rooks_moves(player, i);
+				std::vector<move> a = get_rooks_moves(player, i);
 				if (a.size() != 0) {
 					all_possible_moves.insert(all_possible_moves.end(), a.begin(), a.end());
 				}
 				break;
 			}
 			case knights: {
-				std::vector<Single_move> a = get_knights_moves(player, i);
+				std::vector<move> a = get_knights_moves(player, i);
 				if (a.size() != 0) {
 					all_possible_moves.insert(all_possible_moves.end(), a.begin(), a.end());
 				}
 				break;
 			}
 			case bishops: {
-				std::vector<Single_move> a = get_bishops_moves(player, i);
+				std::vector<move> a = get_bishops_moves(player, i);
 				if (a.size() != 0) {
 					all_possible_moves.insert(all_possible_moves.end(), a.begin(), a.end());
 				}
 				break;
 			}
 			case queens: {
-				std::vector<Single_move> a = get_queens_moves(player, i);
+				std::vector<move> a = get_queens_moves(player, i);
 				if (a.size() != 0) {
 					all_possible_moves.insert(all_possible_moves.end(), a.begin(), a.end());
 				}
 				break;
 			}
 			case king: {
-				std::vector<Single_move> a = get_king_moves(player, i);
+				std::vector<move> a = get_king_moves(player, i);
 				if (a.size() != 0) {
 					all_possible_moves.insert(all_possible_moves.end(), a.begin(), a.end());
 				}

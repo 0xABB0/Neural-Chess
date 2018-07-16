@@ -1,6 +1,6 @@
 #include "moves.h"
 
-std::string Single_move::to_long_algebraic_notation()
+std::string move::to_long_algebraic_notation()
 {
 	std::string to_ret = "";
 	to_ret += (starting_position % 8) + 'a';
@@ -13,7 +13,7 @@ std::string Single_move::to_long_algebraic_notation()
 	return to_ret;
 }
 
-std::string Single_move::to_string()
+std::string move::to_string()
 {
 	std::string to_ret = "";
 	std::string player_color = player ? "black" : "white";

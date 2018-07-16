@@ -1,13 +1,13 @@
 #include "player.h"
 
-Player::Player() : nn(neural_net_location) {}
+player::player() : nn(neural_net_location) {}
 
-Single_move Player::choose_move(board &b, std::vector<Single_move>& possible_moves) {
-	Single_move best_move = possible_moves.at(0);
+move player::choose_move(board &b, std::vector<move>& possible_moves) {
+	move best_move = possible_moves.at(0);
 
 	double best_move_eval = evaluate_move(best_move, b);
 
-	for (Single_move move : possible_moves) {
+	for (move move : possible_moves) {
 		double eval = evaluate_move(move, b);
 		if (side) {
 			if (eval < best_move_eval) {
@@ -25,7 +25,7 @@ Single_move Player::choose_move(board &b, std::vector<Single_move>& possible_mov
 	return best_move;
 }
 
-double Player::evaluate_move(Single_move move, board &b) {
+double player::evaluate_move(move move, board &b) {
 	board b_copy = board(b);
 
 	b_copy.make_move(move);
@@ -33,7 +33,7 @@ double Player::evaluate_move(Single_move move, board &b) {
 	return evaluate_board(b_copy);
 }
 
-double Player::evaluate_board(board &b) {
+double player::evaluate_board(board &b) {
 	OpenNN::Vector<double> inputs(12);
 
 	for (int i = pawns; i < king; i++) {

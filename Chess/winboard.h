@@ -3,4 +3,4 @@
 #include "game_board.h"
 #include "player.h"
 
-void winboard_loop(board &, Player, std::string&);
+void winboard_loop(board &, player, std::string&);

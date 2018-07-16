@@ -7,7 +7,7 @@ std::string parse_command(std::string& command, std::vector<std::string>& comman
 	return command_tokens[0];
 }
 
-void winboard_loop(board &b, Player engine, std::string& command) {
+void winboard_loop(board &b, player engine, std::string& command) {
 	enum { WHITE, BLACK, FORCE_MODE, ANALYZE } engine_mode;
 	enum { WHITETOMOVE, BLACKTOMOVE } game_state;
 	int last_game_result;
@@ -16,7 +16,7 @@ void winboard_loop(board &b, Player engine, std::string& command) {
 	engine_mode = BLACK;
 	do {
 		if ((engine_mode == BLACK && game_state == BLACKTOMOVE) || (engine_mode == WHITE && game_state == WHITETOMOVE)) {
-			std::vector<Single_move> possible_moves = b.get_all_moves(engine.getSide());
+			std::vector<move> possible_moves = b.get_all_moves(engine.getSide());
 			if (possible_moves.size() == 0) {
 				std::string result;
 				if (engine_mode == WHITE) {
@@ -28,7 +28,7 @@ void winboard_loop(board &b, Player engine, std::string& command) {
 				std::cout << result << std::endl << "resign" << std::endl;
 			}
 			else {
-				Single_move move = engine.choose_move(b, possible_moves);
+				move move = engine.choose_move(b, possible_moves);
 				b.make_move(move);
 				if (game_state == WHITETOMOVE) {
 					game_state = BLACKTOMOVE;
@@ -101,7 +101,7 @@ void winboard_loop(board &b, Player engine, std::string& command) {
 				}
 
 				int piece = b.piece_at(starting_file + starting_rank * 8);
-				Single_move move(game_state == WHITETOMOVE ? false : true,
+				move move(game_state == WHITETOMOVE ? false : true,
 					piece, starting_file + starting_rank * 8,
 					ending_file + ending_rank * 8, move_flag, promotion_type);
 

@@ -2,12 +2,12 @@
 
 player::player() : nn(neural_net_location) {}
 
-move player::choose_move(board &b, std::vector<move>& possible_moves) {
-	move best_move = possible_moves.at(0);
+Move player::choose_move(board &b, std::vector<Move>& possible_moves) {
+	Move best_move = possible_moves.at(0);
 
 	double best_move_eval = evaluate_move(best_move, b);
 
-	for (move move : possible_moves) {
+	for (Move move : possible_moves) {
 		double eval = evaluate_move(move, b);
 		if (side) {
 			if (eval < best_move_eval) {
@@ -25,7 +25,7 @@ move player::choose_move(board &b, std::vector<move>& possible_moves) {
 	return best_move;
 }
 
-double player::evaluate_move(move move, board &b) {
+double player::evaluate_move(Move move, board &b) {
 	board b_copy = board(b);
 
 	b_copy.make_move(move);
@@ -54,8 +54,6 @@ OpenNN::NeuralNetwork create_nn_from_scratch() {
 	architecture[2] = 1000;
 	architecture[3] = 500;
 	architecture[4] = 1;
-
-	std::cout << "Architecture done, creating NN..." << std::endl;
 
 	return OpenNN::NeuralNetwork(architecture);
 }

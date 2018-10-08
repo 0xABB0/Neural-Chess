@@ -56,14 +56,14 @@ public:
 
 	BB get_all_moves_as_bitboards(bool);
 
-	std::vector<move> get_pawns_moves(bool, int);
-	std::vector<move> get_rooks_moves(bool, int);
-	std::vector<move> get_knights_moves(bool, int);
-	std::vector<move> get_bishops_moves(bool, int);
-	std::vector<move> get_queens_moves(bool, int);
-	std::vector<move> get_king_moves(bool, int);
+	std::vector<Move> get_pawns_moves(bool, int);
+	std::vector<Move> get_rooks_moves(bool, int);
+	std::vector<Move> get_knights_moves(bool, int);
+	std::vector<Move> get_bishops_moves(bool, int);
+	std::vector<Move> get_queens_moves(bool, int);
+	std::vector<Move> get_king_moves(bool, int);
 
-	std::vector<move> get_all_moves(bool);
+	std::vector<Move> get_all_moves(bool);
 
 	BB get_pawns(bool player) { return game_board[player][pawns]; }
 	BB get_rooks(bool player) { return game_board[player][rooks]; }
@@ -77,7 +77,7 @@ public:
 	bool check(bool);
 	bool checkmate(bool);
 
-	void make_move(move);
+	void make_move(Move);
 
 	void print_board_letters();
 

@@ -7,12 +7,12 @@ class player
 {
 public:
 	player();
-	move choose_move(board &, std::vector<move>& possible_moves);
+	Move choose_move(board &, std::vector<Move>& possible_moves);
 	~player() {}
 	bool getSide() { return side; };
 	void setSide(bool side) { this->side = side; };
 private:
-	double evaluate_move(move, board&);
+	double evaluate_move(Move, board&);
 	double evaluate_board(board &);
 	bool side;
 	OpenNN::NeuralNetwork nn;

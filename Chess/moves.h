@@ -1,7 +1,7 @@
 #pragma once
 #include "macros.h"
 
-struct move{
+struct Move{
 	bool player;
 	int piece_type;
 	int starting_position;
@@ -12,7 +12,7 @@ struct move{
 
 	std::string to_long_algebraic_notation();
 
-	move(bool player, int piece_type, int starting_position, int ending_position, 
+	Move(bool player, int piece_type, int starting_position, int ending_position, 
 		int special_move_flag, int promotion_type) : player(player), piece_type(piece_type), 
 		starting_position(starting_position), ending_position(ending_position), 
 		special_move_flag(special_move_flag), promotion_type(promotion_type) {}

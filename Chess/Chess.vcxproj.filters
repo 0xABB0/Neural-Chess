@@ -42,9 +42,6 @@
     <ClInclude Include="slider_attacks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="create_dataset.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game_board.cpp">
@@ -66,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="slider_attacks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="create_dataset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

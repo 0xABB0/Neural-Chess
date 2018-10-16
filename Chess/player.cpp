@@ -36,7 +36,7 @@ double player::evaluate_move(Move move, board &b) {
 double player::evaluate_board(board &b) {
 	OpenNN::Vector<double> inputs(12);
 
-	for (int i = pawns; i < king; i++) {
+	for (int i = pawns; i <= king; i++) {
 		inputs[i] = (double)b.get_bitboard(i, false);
 		inputs[6 + i] = (double)b.get_bitboard(i, true);
 	}

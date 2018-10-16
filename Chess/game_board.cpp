@@ -54,52 +54,52 @@ BB board::get_king_moves_as_bitboard(unsigned short position, bool is_black) {
 	return King_Lookup_Table[position] & ~(occupied_array[is_black]);
 }
 
-void board::make_move(Move _move) {
-	if (_move.special_move_flag == 0 || _move.special_move_flag == 1) {
-		BB end = 1i64 << _move.ending_position;
-		BB start = 1i64 << _move.starting_position;
-		short int piece_type_ending = support_game_board[_move.ending_position];
+void board::make_move(Move move) {
+	if (move.special_move_flag == 0 || move.special_move_flag == 1) {
+		BB end = 1i64 << move.ending_position;
+		BB start = 1i64 << move.starting_position;
+		short int piece_type_ending = support_game_board[move.ending_position];
 
-		game_board[_move.player][_move.piece_type] ^= start;
+		game_board[move.player][move.piece_type] ^= start;
 
-		occupied_array[_move.player] ^= start ^ end;
+		occupied_array[move.player] ^= start ^ end;
 
 		if (piece_type_ending != -1) {
-			game_board[!_move.player][piece_type_ending] ^= end;
-			occupied_array[!_move.player] ^= end;
+			game_board[!move.player][piece_type_ending] ^= end;
+			occupied_array[!move.player] ^= end;
 		}
 
-		support_game_board[_move.starting_position] = -1;
+		support_game_board[move.starting_position] = -1;
 
 		occupied = occupied_array[0] | occupied_array[1];
-		if (_move.special_move_flag == 0) {
-			support_game_board[_move.ending_position] = _move.piece_type;
-			game_board[_move.player][_move.piece_type] ^= end;
+		if (move.special_move_flag == 0) {
+			support_game_board[move.ending_position] = move.piece_type;
+			game_board[move.player][move.piece_type] ^= end;
 		}
 		else {
-			support_game_board[_move.ending_position] = _move.promotion_type;
-			game_board[_move.player][_move.promotion_type] ^= end;
+			support_game_board[move.ending_position] = move.promotion_type;
+			game_board[move.player][move.promotion_type] ^= end;
 		}
 	}
-	else if (_move.special_move_flag == 2) {}
-	else if (_move.special_move_flag == 3) {
-		make_move(Move(_move.player, king, _move.starting_position, _move.ending_position, 0, 0));
-		if (!_move.player) {
-			if (_move.ending_position == 7) {
+	else if (move.special_move_flag == 2) {}
+	else if (move.special_move_flag == 3) {
+		make_move(Move(move.player, king, move.starting_position, move.ending_position, 0, 0));
+		if (!move.player) {
+			if (move.ending_position == 7) {
 				//short castle
 				make_move(Move(white, rooks, 7, 5, 0, 0));
 			}
-			else if (_move.ending_position == 3) {
+			else if (move.ending_position == 3) {
 				//long castle
 				make_move(Move(white, rooks, 0, 3, 0, 0));
 			}
 		}
 		else {
-			if (_move.ending_position == 63) {
+			if (move.ending_position == 63) {
 				//short castle
 				make_move(Move(black, rooks, 64, 62, 0, 0));
 			}
-			else if (_move.ending_position == 57) {
+			else if (move.ending_position == 57) {
 				//long castle
 				make_move(Move(white, rooks, 56, 59, 0, 0));
 			}
